@@ -15,12 +15,11 @@ $(document).ready(function(){
         product: {name: name, base_price: basePrice, description: description, quantity_on_hand: quantityOnHand, color: color, weight: weight}
       },
       success: function(data){
-        $('#turd').append(data);
+        $('#turd').prepend(data);
       },
       error: function(data){
       }
-
-    })
+    });
   }
 
   function indexProducts(){
@@ -34,7 +33,6 @@ $(document).ready(function(){
           }
         },
         error: function(data) {
-
         }
       }
     )
@@ -54,19 +52,16 @@ $(document).ready(function(){
     var quantityOnHand = $('#product_quantity').val();
     var color = $('#product_color').val();
     var weight = $('#product_weight').val();
-    $.ajax(baseURL,
-    {
+    $.ajax(baseURL, {
       type: "POST",
       data: {product: {name: name, base_price: basePrice, description: description, quantity_on_hand: quantityOnHand, color: color, weight: weight}},
       success: function(data) {
-        alert('this worked');
         console.log(data);
       },
       error: function(data){
-        alert('this did not work');
         console.log(data);
       }
-    })
+    });
   });
 
 });
