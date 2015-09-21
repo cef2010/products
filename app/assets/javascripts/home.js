@@ -122,7 +122,7 @@ $(document).ready(function(){
         }
       },
       success: function(data){
-        
+
         $('#add_new_form').addClass('hide');
         $('#add_button').removeClass('hide');
         $('#add_a_piece').removeClass('hide');
