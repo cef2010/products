@@ -8,11 +8,12 @@ $(document).ready(function(){
     var quantityOnHand = productData.quantity_on_hand;
     var color = productData.color;
     var weight = productData.weight;
+    var id = productData.id;
     $.ajax('/add_product_card',
     {
       type: "GET",
       data: {
-        product: {name: name, base_price: basePrice, description: description, quantity_on_hand: quantityOnHand, color: color, weight: weight}
+        product: {name: name, base_price: basePrice, description: description, quantity_on_hand: quantityOnHand, color: color, weight: weight, id: id}
       },
       success: function(data){
         $('#turd').prepend(data);
@@ -43,6 +44,7 @@ $(document).ready(function(){
   $('#add_button').click(function(){
     $('#add_new_form').removeClass('hide');
     $('#add_button').addClass('hide');
+    $('#edit_a_piece').addClass('hide');
   });
 
   $('#add_a_piece').click(function(){
@@ -69,6 +71,67 @@ $(document).ready(function(){
     });
   });
 
+  $(document).on('click', '.delete-button', function(){
+    var that = $(this);
+    var cardID = that.parent().attr('id');
+    $.ajax(baseURL + '/' + cardID, {
+      type: 'DELETE',
+      success: function(data){
+        that.closest('.card-holder').remove();
+      },
+      error: function(data){
+        console.log('now you fucked up');
+      }
+    })
+  });
 
+  var currentID = '';
+
+  $(document).on('click', '.edit-button', function(){
+    $('#add_new_form').removeClass('hide');
+    $('#add_button').addClass('hide');
+    $('#add_a_piece').addClass('hide');
+    $('#edit_a_piece').removeClass('hide');
+    var cardID = $(this).parent().attr('id');
+    currentID = cardID;
+    $.ajax(baseURL + '/' + cardID, {
+      type: 'GET',
+      success: function(data){
+        $('#product_name').val(data.product.name);
+        $('#product_description').val(data.product.description);
+        $('#product_price').val(data.product.base_price);
+        $('#product_quantity').val(data.product.quantity_on_hand);
+        $('#product_color').val(data.product.color);
+        $('#product_weight').val(data.product.weight);
+      }
+    })
+  });
+
+  $('#edit_a_piece').click(function(){
+    var name = $('#product_name').val();
+    var description = $('#product_description').val();
+    var price = $('#product_price').val();
+    var quantity = $('#product_quantity').val();
+    var color = $('#product_color').val();
+    var weight = $('#product_weight').val();
+    $.ajax(baseURL + '/' + currentID, {
+      type: 'PUT',
+      data: {
+        product: {
+          name: name, description: description, base_price: price, quantity_on_hand: quantity, color: color, weight: weight
+        }
+      },
+      success: function(data){
+        
+        $('#add_new_form').addClass('hide');
+        $('#add_button').removeClass('hide');
+        $('#add_a_piece').removeClass('hide');
+        $('#edit_a_piece').addClass('hide');
+      },
+      error: function(data){
+        console.log('nope');
+      }
+    })
+  });
 
 });
