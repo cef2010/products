@@ -52,16 +52,23 @@ $(document).ready(function(){
     var quantityOnHand = $('#product_quantity').val();
     var color = $('#product_color').val();
     var weight = $('#product_weight').val();
+    var newForm = $('#add_new_form');
+    var newButton = $('#add_button');
     $.ajax(baseURL, {
       type: "POST",
       data: {product: {name: name, base_price: basePrice, description: description, quantity_on_hand: quantityOnHand, color: color, weight: weight}},
       success: function(data) {
-        console.log(data);
+        addProductCard(data.product);
+        newForm[0].reset();
+        newForm.addClass('hide');
+        newButton.removeClass('hide');
       },
       error: function(data){
-        console.log(data);
+        alert('you got an error yo.');
       }
     });
   });
+
+
 
 });
